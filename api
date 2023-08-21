@@ -1,0 +1,37 @@
+-- / ColorAPI (anywhere in code)
+loadstring(game:HttpGet("https://pastebin.com/raw/jEDjp9Cw"))()
+
+local plr = game.Players.LocalPlayer
+local folder = game:GetService("Workspace").Terrain["_Game"]:WaitForChild("Folder")
+local defaultColor = Color3.new(1, 0, 0) -- Default red color
+
+local function setColor(part, color)
+    colorAPI.color(part, color)
+end
+
+-- Equip tools function
+local function equipTools()
+    for _, tool in pairs(plr.Backpack:GetChildren()) do
+        if tool:IsA("Tool") then
+            tool.Parent = plr.Character
+        end
+    end
+end
+
+for i, v in pairs(folder:GetChildren()) do
+    setColor(v, defaultColor)
+end
+
+-- Chat command handler
+plr.Chatted:Connect(function(message)
+    local command, r, g, b = message:match("^%.clr%s*(%d+)%s*(%d+)%s*(%d+)$")
+    if command then
+        equipTools()
+        wait(0.5)
+        local newColor = Color3.new(tonumber(r), tonumber(g), tonumber(b))
+        for i, part in pairs(folder:GetChildren()) do
+            setColor(part, newColor)
+        end
+        plr.Character.Humanoid:UnequipTools() -- Unequip tools after processing
+    end
+end)
