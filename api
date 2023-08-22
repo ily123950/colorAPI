@@ -18,6 +18,8 @@ local function equipTools()
     end
 end
 
+equipTools() -- Equip tools first
+
 for i, v in pairs(folder:GetChildren()) do
     setColor(v, defaultColor)
 end
@@ -26,12 +28,12 @@ end
 plr.Chatted:Connect(function(message)
     local command, r, g, b = message:match("^%.clr%s*(%d+)%s*(%d+)%s*(%d+)$")
     if command then
-        equipTools()
-        wait(0.5)
-        local newColor = Color3.new(tonumber(r), tonumber(g), tonumber(b))
+        local newColor = Color3.fromRGB(tonumber(r), tonumber(g), tonumber(b))
         for i, part in pairs(folder:GetChildren()) do
             setColor(part, newColor)
         end
+        wait(1) -- Wait for 1 second
+        equipTools()
         plr.Character.Humanoid:UnequipTools() -- Unequip tools after processing
     end
 end)
